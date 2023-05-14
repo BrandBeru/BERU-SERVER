@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<root>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Not a valid password</string>
+    <string name="invalid_host">Not a valid host</string>
+    <string name="invalid_port">Not a valid port</string>
+    <string name="login_failed">Login invalid</string>
+
+    <string name="application_name">BERU-SERVER CONTROLLER MORE</string>
+
+    <string-array name="connection_type">
+        <item>FTP</item>
+        <item>SFTP</item>
+        <item>DataBase Manager</item>
+        <item>SSH Manager</item>
+    </string-array>
+
+
+</root>

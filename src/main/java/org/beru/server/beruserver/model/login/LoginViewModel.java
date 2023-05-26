@@ -1,9 +1,7 @@
 package org.beru.server.beruserver.model.login;
 
-import org.beru.server.beruserver.controller.LoginController;
 import org.beru.server.beruserver.model.Observer;
 import org.beru.server.beruserver.resources.R;
-import org.beru.server.beruserver.view.ui.Toast;
 
 public class LoginViewModel implements Observer {
     LoginRepository loginRepository;
@@ -43,8 +41,8 @@ public class LoginViewModel implements Observer {
         return password != null && password.trim().length() > 3;
     }
 
-    public User login(String username, String password,String host, int port,int type){
-        Result<User> result = loginRepository.login(username, password,host,port,type);
+    public User login(String username, String password,String host, int port,int type, String db){
+        Result<User> result = loginRepository.login(username, password,host,port,type, db);
 
         if(result instanceof Result.Success<?>){
             return ((Result.Success<User>)result).getData();

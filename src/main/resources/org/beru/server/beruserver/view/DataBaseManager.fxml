@@ -32,21 +32,11 @@
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.SeparatorMenuItem?>
-<?import javafx.scene.control.SplitPane?>
-<?import javafx.scene.control.TabPane?>
-<?import javafx.scene.control.TreeView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.paint.Color?>
-<?import javafx.scene.text.Font?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
 
 <VBox prefHeight="768.0" prefWidth="1366.0" xmlns="http://javafx.com/javafx/20" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.beru.server.beruserver.controller.DataBaseController">
   <children>
@@ -54,7 +44,7 @@
       <menus>
         <Menu mnemonicParsing="false" text="File">
           <items>
-            <MenuItem mnemonicParsing="false" text="New" />
+            <MenuItem mnemonicParsing="false" onAction="#newConnection" text="New Connection" />
             <MenuItem mnemonicParsing="false" text="Open…" />
             <Menu mnemonicParsing="false" text="Open Recent" />
             <SeparatorMenuItem mnemonicParsing="false" />
@@ -96,7 +86,14 @@
                   <TreeView fx:id="navigatorDB" editable="true" layoutX="70.0" layoutY="77.0" prefHeight="200.0" prefWidth="200.0" scaleShape="false" showRoot="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                </children>
         </AnchorPane>
-            <TabPane fx:id="tabPane" tabClosingPolicy="UNAVAILABLE" />
+            <TabPane fx:id="tabPane" tabClosingPolicy="UNAVAILABLE">
+               <tabs>
+                  <Tab>
+                    <content>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                    </content>
+                  </Tab>
+               </tabs></TabPane>
         <AnchorPane>
           <children>
             <Label alignment="CENTER" layoutX="14.0" layoutY="14.0" style="&#10;" text="Details" textAlignment="CENTER" wrapText="false">

@@ -1,7 +1,5 @@
 package org.beru.server.beruserver.model.login;
 
-import org.beru.server.beruserver.controller.LoginController;
-
 public class LoginFormState {
     private String usernameError;
     private String passwordError;

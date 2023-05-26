@@ -6,7 +6,6 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import org.beru.server.beruserver.model.Json;
 import org.beru.server.beruserver.resources.Active;
 import org.beru.server.beruserver.resources.Files;
 import org.beru.server.beruserver.resources.Path;
@@ -20,7 +19,7 @@ public class Main extends Application {
     public void start(Stage stage) throws IOException {
         Active.r = new R();
         initializer();
-        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("view/DataBaseManager.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("view/Chooser.fxml"));
         Active.activeStage = stage;
         Scene scene = new Scene(fxmlLoader.load());
         MFXThemeManager.addOn(scene, Themes.DEFAULT, Themes.LEGACY);
@@ -37,7 +36,6 @@ public class Main extends Application {
         try {
             Path.mkdirs();
             Files.files();
-            new Json().load();
         } catch (IOException e) {
             Toast.makeText(Active.activeStage, "Cannot create config files", 2000, 500,300);
         }

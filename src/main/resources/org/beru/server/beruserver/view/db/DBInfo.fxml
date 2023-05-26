@@ -29,13 +29,15 @@
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                            <children>
                               <Label layoutX="14.0" layoutY="14.0" text="Schema Name:" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="15.0" />
-                              <TextField layoutX="98.0" layoutY="11.0" AnchorPane.leftAnchor="150.0" AnchorPane.rightAnchor="500.0" AnchorPane.topAnchor="11.0" />
+                              <TextField fx:id="schemaNameText" layoutX="98.0" layoutY="11.0" AnchorPane.leftAnchor="150.0" AnchorPane.topAnchor="11.0" />
                               <Label layoutX="14.0" layoutY="47.0" text="Charset:" AnchorPane.leftAnchor="14.0" />
-                              <ComboBox layoutX="149.0" layoutY="43.0" prefHeight="24.0" AnchorPane.leftAnchor="149.0" AnchorPane.rightAnchor="951.0" />
+                              <ComboBox fx:id="charsetCB" layoutX="149.0" layoutY="43.0" prefHeight="24.0" AnchorPane.leftAnchor="149.0" />
                               <Label layoutX="14.0" layoutY="79.0" text="Collaion:" AnchorPane.leftAnchor="14.0" />
-                              <ComboBox layoutX="149.0" layoutY="75.0" prefHeight="24.0" AnchorPane.leftAnchor="149.0" AnchorPane.rightAnchor="951.0" />
+                              <ComboBox fx:id="collationCB" layoutX="149.0" layoutY="75.0" prefHeight="24.0" AnchorPane.leftAnchor="149.0" />
                               <Label layoutX="15.0" layoutY="109.0" text="Database size:" AnchorPane.leftAnchor="15.0" />
-                              <TextField layoutX="149.0" layoutY="105.0" AnchorPane.leftAnchor="150.0" />
+                              <TextField fx:id="databaseSizeText" layoutX="149.0" layoutY="105.0" AnchorPane.leftAnchor="150.0" />
+                              <Label layoutX="14.0" layoutY="142.0" text="SQL Path:" AnchorPane.leftAnchor="15.0" />
+                              <TextField fx:id="sqlPathText" layoutX="148.0" layoutY="138.0" AnchorPane.leftAnchor="150.0" />
                            </children>
                         </AnchorPane>
                         <TabPane prefHeight="200.0" prefWidth="200.0" side="BOTTOM" tabClosingPolicy="UNAVAILABLE">
@@ -44,14 +46,14 @@
                                  <content>
                                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                        <children>
-                                          <TableView layoutX="97.0" layoutY="55.0" prefHeight="281.0" prefWidth="1280.0" tableMenuButtonVisible="true" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                          <TableView fx:id="tablesTable" layoutX="97.0" layoutY="55.0" prefHeight="281.0" prefWidth="1280.0" tableMenuButtonVisible="true" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                              <columns>
-                                                <TableColumn prefWidth="75.0" text="Id" />
-                                                <TableColumn prefWidth="150.0" text="Table Name" />
-                                                <TableColumn prefWidth="150.0" text="Engine" />
-                                                <TableColumn prefWidth="75.0" text="Auto Increment" />
-                                                <TableColumn prefWidth="100.0" text="Data Lenght" />
-                                                <TableColumn prefWidth="100.0" text="Description" />
+                                                <TableColumn fx:id="idCol" prefWidth="25.0" text="Id" />
+                                                <TableColumn fx:id="nameCol" prefWidth="150.0" text="Table Name" />
+                                                <TableColumn fx:id="engineCol" prefWidth="150.0" text="Engine" />
+                                                <TableColumn fx:id="aiCol" prefWidth="75.0" text="Auto Increment" />
+                                                <TableColumn fx:id="dataLengthCol" prefWidth="100.0" text="Data Length" />
+                                                <TableColumn fx:id="descriptionCol" prefWidth="100.0" text="Description" />
                                              </columns>
                                              <columnResizePolicy>
                                                 <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -70,17 +72,17 @@
                                                    </opaqueInsets>
                                                 </Button>
                                                 <Separator orientation="VERTICAL" prefHeight="200.0" />
-                                                <Button mnemonicParsing="false" style="-fx-background-color: transparent;" text="Save">
+                                                <Button mnemonicParsing="false" onAction="#save" style="-fx-background-color: transparent;" text="Save">
                                                    <graphic>
                                                       <FontIcon iconLiteral="mdi2d-database-edit" iconSize="22" />
                                                    </graphic>
                                                 </Button>
-                                                <Button mnemonicParsing="false" style="-fx-background-color: transparent;" text="Revert">
+                                                <Button mnemonicParsing="false" onAction="#revert" style="-fx-background-color: transparent;" text="Revert">
                                                    <graphic>
                                                       <FontIcon iconLiteral="mdi2d-database-minus" iconSize="22" />
                                                    </graphic>
                                                 </Button>
-                                                <Button mnemonicParsing="false" style="-fx-background-color: transparent;" text="Refresh">
+                                                <Button mnemonicParsing="false" onAction="#refresh" style="-fx-background-color: transparent;" text="Refresh">
                                                    <graphic>
                                                       <FontIcon iconLiteral="mdi2d-database-refresh" iconSize="22" />
                                                    </graphic>

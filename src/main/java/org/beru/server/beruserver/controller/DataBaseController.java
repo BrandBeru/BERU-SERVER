@@ -1,5 +1,6 @@
 package org.beru.server.beruserver.controller;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.TabPane;
@@ -13,6 +14,7 @@ import org.beru.server.beruserver.model.db.model.Column;
 import org.beru.server.beruserver.model.db.model.DB;
 import org.beru.server.beruserver.model.db.model.Table;
 import org.beru.server.beruserver.resources.Active;
+import org.beru.server.beruserver.view.ui.Actions;
 import org.beru.server.beruserver.view.ui.Context;
 import org.beru.server.beruserver.view.ui.Toast;
 import org.beru.server.beruserver.view.ui.control.TreeItemDB;
@@ -21,28 +23,21 @@ import org.kordamp.ikonli.javafx.FontIcon;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class DataBaseController implements Initializable {
-    public TreeView navigatorDB;
+public class DataBaseController implements Initializable{
+    public TreeView<String> navigatorDB;
     public TabPane tabPane;
-    SqlManager manager;
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
+    public void initialize() {
         try{
-            Test2 test = new Test2();
-            manager = new SqlManager();
-            manager.read(1, test);
-            System.out.println(test);
-            manager.create(test);
-            loadNavigator();
-            Active.dataBaseController = this;
+//            Test2 test = new Test2();
+//            this.manager = manager;
+//            manager.read(1, test);
+//            manager.create(test);
         }catch (Exception e){
             e.printStackTrace();
             Toast.makeError(Active.activeStage, "¡Error!", e.getLocalizedMessage(), Toast.ToastDuration.LONG_DURATION, Toast.FadeDelay.MEDIUM_DURATION, Toast.FadeDelay.SHORT_DURATION);
         }
     }
-    private void loadNavigator(){
-        TreeItem<String> root = new TreeItem<String>("DataBases");
-        navigatorDB.setRoot(root);
+    public void loadNavigator(SqlManager manager){
         TreeItemDB<String> mysql = new TreeItemDB<>("Mysql");
         manager.getDatabases().forEach(db -> {
             FontIcon dbIcon = new FontIcon("mdi2d-database:22:BLUE");
@@ -66,7 +61,7 @@ public class DataBaseController implements Initializable {
         navigatorDB.setOnMouseClicked((event -> {
             try{
                 Node node = event.getPickResult().getIntersectedNode();
-                if(node instanceof Text || (node instanceof TreeCell<?> && ((TreeCell) node).getText() != null)) {
+                if(node instanceof Text || (node instanceof TreeCell<?> && ((TreeCell<?>) node).getText() != null)) {
                     TreeItemDB<?> item = (TreeItemDB<?>) navigatorDB.getSelectionModel().getSelectedItem();
                     if(item.get() instanceof DB db){
                         navigatorDB.setContextMenu(Context.dataBase(db));
@@ -80,5 +75,18 @@ public class DataBaseController implements Initializable {
                 e.printStackTrace();
             }
         }));
+    }
+
+    public void newConnection(ActionEvent actionEvent) {
+        Actions.openDBLogin();
+    }
+    private TreeItem<String> root;
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        Active.dataBaseController = this;
+        Active.tabPane = tabPane;
+
+        root = new TreeItem<String>("DataBases");
+        navigatorDB.setRoot(root);
     }
 }

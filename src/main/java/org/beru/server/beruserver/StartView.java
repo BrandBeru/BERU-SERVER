@@ -10,11 +10,11 @@ import jfxtras.styles.jmetro.Style;
 import org.beru.server.beruserver.resources.Active;
 import org.beru.server.beruserver.resources.R;
 
-public class Sftp {
-    public void start() throws Exception {
+public class StartView {
+    public void start(String view) throws Exception {
         Stage stage = new Stage();
         Active.activeStage = stage;
-        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("view/Application.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("view/"+view+".fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         new JMetro(scene.getRoot(), Style.DARK);
         MFXThemeManager.addOn(scene, Themes.DEFAULT, Themes.LEGACY);

@@ -32,21 +32,12 @@
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.SeparatorMenuItem?>
-<?import javafx.scene.control.SplitPane?>
-<?import javafx.scene.control.TreeView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.paint.Color?>
-<?import javafx.scene.text.Font?>
+<?import io.github.palexdev.materialfx.controls.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
 
 <VBox prefHeight="768.0" prefWidth="1366.0" xmlns="http://javafx.com/javafx/20" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.beru.server.beruserver.controller.SftpController">
   <children>
@@ -54,7 +45,7 @@
       <menus>
         <Menu mnemonicParsing="false" text="File">
           <items>
-            <MenuItem mnemonicParsing="false" text="New" />
+            <MenuItem mnemonicParsing="false" onAction="#newConnection" text="New Connection" />
             <MenuItem mnemonicParsing="false" text="Open…" />
             <Menu mnemonicParsing="false" text="Open Recent" />
             <SeparatorMenuItem mnemonicParsing="false" />
@@ -89,36 +80,68 @@
         </Menu>
       </menus>
     </MenuBar>
-    <SplitPane dividerPositions="0.2505567928730512, 0.7505567928730512" focusTraversable="true" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
+    <SplitPane dividerPositions="0.16202346041055718, 0.8577712609970675" focusTraversable="true" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
       <items>
         <AnchorPane>
                <children>
-                  <TreeView fx:id="remoteFilesTreeView" layoutX="93.0" layoutY="123.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                  <TreeView fx:id="remoteFilesTreeView" layoutX="93.0" layoutY="123.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="20.0" />
+                  <Label alignment="CENTER" layoutX="73.0" layoutY="6.0" prefHeight="20.0" text="REMOTE FILES" textFill="RED" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <font>
+                        <Font name="System Bold" size="13.0" />
+                     </font>
+                  </Label>
                </children>
         </AnchorPane>
-        <ScrollPane prefHeight="-1.0" prefWidth="-1.0">
-          <content>
-            <AnchorPane id="Content" minHeight="-1.0" minWidth="-1.0" prefHeight="545.0" prefWidth="430.0" />
-          </content>
-        </ScrollPane>
+            <SplitPane dividerPositions="0.5" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0">
+              <items>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+                     <children>
+                        <TabPane fx:id="remoteFileView" layoutX="198.0" layoutY="94.0" minHeight="-Infinity" minWidth="-Infinity" side="LEFT" tabClosingPolicy="ALL_TABS" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <tabs>
+                              <Tab closable="false">
+                                <content>
+                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                </content>
+                              </Tab>
+                           </tabs></TabPane>
+                     </children>
+                  </AnchorPane>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+                     <children>
+                        <TabPane fx:id="localFileView" layoutX="63.0" layoutY="133.0" minHeight="-Infinity" minWidth="-Infinity" side="RIGHT" tabClosingPolicy="ALL_TABS" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <tabs>
+                              <Tab closable="false">
+                                <content>
+                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                </content>
+                              </Tab>
+                           </tabs></TabPane>
+                     </children>
+                  </AnchorPane>
+              </items>
+            </SplitPane>
         <AnchorPane>
                <children>
-                  <TreeView fx:id="treeView" layoutX="26.0" layoutY="-76.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                  <TreeView fx:id="treeView" layoutX="26.0" layoutY="-76.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="20.0" />
+                  <Label alignment="CENTER" layoutX="60.0" layoutY="6.0" prefHeight="20.0" text="LOCAL FILES" textFill="BLUE" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <font>
+                        <Font name="System Bold" size="13.0" />
+                     </font>
+                  </Label>
                </children></AnchorPane>
       </items>
     </SplitPane>
     <HBox id="HBox" fx:id="bottomPanel" alignment="CENTER_LEFT" spacing="5.0" VBox.vgrow="NEVER">
       <children>
-        <Label maxHeight="1.7976931348623157E308" maxWidth="-1.0" text="Left status" HBox.hgrow="ALWAYS">
-          <font>
-            <Font size="11.0" fx:id="x3" />
-          </font>
-          <textFill>
-            <Color red="0.625" green="0.625" blue="0.625" fx:id="x4" />
-          </textFill>
-        </Label>
+            <MFXProgressBar fx:id="progressBar" prefHeight="8.0" prefWidth="377.0" progress="0.0" />
         <Pane prefHeight="-1.0" prefWidth="-1.0" HBox.hgrow="ALWAYS" />
-        <Label font="$x3" maxWidth="-1.0" text="Right status" textFill="$x4" HBox.hgrow="NEVER" />
+        <Label fx:id="logInfoText" maxWidth="-1.0" text="Right status" HBox.hgrow="NEVER">
+               <font>
+            <Font size="11.0" fx:id="x3" />
+               </font>
+               <textFill>
+            <Color red="0.625" green="0.625" blue="0.625" fx:id="x4" />
+               </textFill></Label>
       </children>
       <padding>
         <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />

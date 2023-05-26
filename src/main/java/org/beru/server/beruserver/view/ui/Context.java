@@ -6,6 +6,7 @@ import javafx.scene.control.MenuItem;
 import org.beru.server.beruserver.model.db.model.Column;
 import org.beru.server.beruserver.model.db.model.DB;
 import org.beru.server.beruserver.model.db.model.Table;
+import org.beru.server.beruserver.model.file.FileType;
 
 public class Context {
     public static ContextMenu dataBase(DB db){
@@ -49,6 +50,34 @@ public class Context {
         MenuItem create = new MenuItem("Create new Column");
 
         cm.getItems().addAll(open, create);
+
+        return cm;
+    }
+    public static ContextMenu file(FileType<?> fileType){
+        ContextMenu cm = new ContextMenu();
+
+        MenuItem newFile = new MenuItem("Create new File");
+        MenuItem open = new MenuItem("Open");
+        open.setOnAction((event -> Actions.openFileExplorer(fileType, false)));
+        MenuItem openNew = new MenuItem("Open in new tab");
+        openNew.setOnAction(event -> Actions.openFileExplorer(fileType, true));
+        MenuItem rename = new MenuItem("Rename");
+        rename.setOnAction((event -> Actions.rename(fileType)));
+
+        Menu download = new Menu("Download in");
+        MenuItem downloads = new MenuItem("Downloads");
+        MenuItem documents = new MenuItem("Documents");
+        MenuItem pictures = new MenuItem("Pictures");
+        MenuItem specificPath = new MenuItem("Specific Path");
+        download.getItems().addAll(downloads, documents, pictures, specificPath);
+
+        MenuItem delete = new MenuItem("Delete");
+        delete.setOnAction((event -> Actions.deleteFile(fileType)));
+
+        if(fileType.isDirectory())
+            cm.getItems().addAll(newFile, open, openNew, rename, delete);
+        else
+            cm.getItems().addAll(open, download, rename, delete);
 
         return cm;
     }

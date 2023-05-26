@@ -75,6 +75,7 @@ public class Toast {
 
         Text text = new Text(toastMsg);
         text.setFont(Font.font("Verdana", 40));
+        text.setFill(Color.WHITE);
         Text error = new Text(toastError);
         error.setFont(Font.font("Verdana", 40));
         error.setFill(Color.RED);

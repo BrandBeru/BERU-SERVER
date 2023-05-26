@@ -1,6 +1,8 @@
 package org.beru.server.beruserver.view.files;
 
 import javafx.scene.control.TreeItem;
+import org.beru.server.beruserver.model.file.LocalFile;
+import org.beru.server.beruserver.view.ui.control.TreeItemFile;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -9,19 +11,21 @@ import java.util.Deque;
 import java.util.LinkedList;
 
 public class LocalFiles extends FileManagement{
-    private TreeItem<String> rootItem;
+    private TreeItemFile<LocalFiles> rootItem;
     private boolean showHiden = true;
-    public LocalFiles(File file){
-        rootItem = new TreeItem<String>(file.getName());
+    public LocalFiles(String file){
+        System.out.println("File->"+file);
+        LocalFile localFile = new LocalFile(new File(file));
+        rootItem = new TreeItemFile<>(localFile);
         rootItem.setExpanded(true);
     }
     @Override
-    public void loadTreeItem(TreeItem<String> selected, String path){
+    public void loadTreeItem(TreeItemFile<?> selected, String path){
         File fPath = new File(path);
-        Deque<TreeItem<String>> elements = new LinkedList<TreeItem<String>>();
+        Deque<TreeItemFile<LocalFiles>> elements = new LinkedList<>();
         selected.getChildren().clear();
         Arrays.stream(fPath.listFiles()).forEach(f -> {
-            TreeItem<String> item = new TreeItem<>(f.getName());
+            TreeItemFile<LocalFiles> item = new TreeItemFile<>(new LocalFile(f));
 
             if(!showHiden && f.isHidden())
                 return;
@@ -41,7 +45,7 @@ public class LocalFiles extends FileManagement{
     }
 
     @Override
-    public TreeItem<String> getRootItem() {
+    public TreeItemFile<LocalFiles> getRootItem() {
         return rootItem;
     }
     @Override

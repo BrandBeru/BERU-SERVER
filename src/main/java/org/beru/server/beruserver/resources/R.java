@@ -112,14 +112,9 @@ public class R {
     }
     public static class array{
         public static String[] connection_type = Active.r.getNodeArray("connection_type");
+        public static String[] databases = Active.r.getNodeArray("databases");
     }
     public static class files{
         public static User user_in_cache(String name){return Active.r.getUserInCache(name);}
-    }
-    public static class properties{
-        public static String url = Active.r.getProperty("datasource.url");
-        public static String active_driver = Active.r.getProperty("datasource.driver-class-name");
-        public static String username = Active.r.getProperty("datasource.username");
-        public static String password = Active.r.getProperty("datasource.password");
     }
 }

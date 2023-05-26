@@ -1,1 +1,1 @@
-[{"id":1,"name":"beru","host":"192.168.0.100","port":22,"type":1}]
+{"name":"beru","password":"MTQwMjA2","host":"192.168.0.100","port":22,"db":"","type":0}

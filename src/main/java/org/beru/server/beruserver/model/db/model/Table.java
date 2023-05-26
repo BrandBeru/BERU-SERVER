@@ -1,6 +1,7 @@
 package org.beru.server.beruserver.model.db.model;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class Table {
@@ -8,20 +9,24 @@ public class Table {
     private String name;
     private String engine;
     private int ai;
+    private String length;
     private String charset;
     private String collation;
     private String description;
+    private Date createTime;
 
     private List<Column> columns = new ArrayList<>();
 
-    public Table(int id, String name, String engine, int ai, String charset, String collation, String description, List<Column> columns) {
+    public Table(int id, String name, String engine, int ai, String length, String charset, String collation, String description, Date createTime, List<Column> columns) {
         this.id = id;
         this.name = name;
         this.engine = engine;
         this.ai = ai;
+        this.length = length;
         this.charset = charset;
         this.collation = collation;
         this.description = description;
+        this.createTime = createTime;
         this.columns = columns;
     }
 
@@ -87,6 +92,22 @@ public class Table {
 
     public void setColumns(List<Column> columns) {
         this.columns = columns;
+    }
+
+    public String getLength() {
+        return length;
+    }
+
+    public void setLength(String length) {
+        this.length = length;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 
     @Override

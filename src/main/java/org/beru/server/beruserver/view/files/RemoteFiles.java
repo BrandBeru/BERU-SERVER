@@ -3,7 +3,9 @@ package org.beru.server.beruserver.view.files;
 import com.jcraft.jsch.ChannelSftp;
 import com.jcraft.jsch.SftpException;
 import javafx.scene.control.TreeItem;
-import org.beru.server.beruserver.model.SSH;
+import org.beru.server.beruserver.model.file.RemoteFile;
+import org.beru.server.beruserver.resources.Active;
+import org.beru.server.beruserver.view.ui.control.TreeItemFile;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -11,9 +13,9 @@ import java.util.Deque;
 import java.util.LinkedList;
 
 public class RemoteFiles extends FileManagement{
-    private TreeItem<String> rootItem;
+    private TreeItemFile<RemoteFile> rootItem;
     private boolean showHiden = true;
-    private ChannelSftp sftp = SSH.instance.sftp;
+    private ChannelSftp sftp = Active.ssh.sftp;
 
     public RemoteFiles(String path){
         File ff = new File(path);
@@ -22,7 +24,8 @@ public class RemoteFiles extends FileManagement{
         } catch (SftpException e) {
             throw new RuntimeException(e);
         }
-        rootItem = new TreeItem<>(ff.getName());
+        RemoteFile rootFile = new RemoteFile(Active.ssh.getHome(), Active.ssh.session.getUserName(),"",0,true);
+        rootItem = new TreeItemFile<>(rootFile);
         rootItem.setExpanded(true);
     }
     @Override
@@ -51,34 +54,39 @@ public class RemoteFiles extends FileManagement{
     }
 
     @Override
-    public void loadTreeItem(TreeItem<String> selected, String path) {
-        File file = new File(path);
-        Deque<TreeItem<String>> elements = new LinkedList<>();
+    public void loadTreeItem(TreeItemFile<?> selected, String path) {
+        Deque<TreeItemFile<RemoteFile>> elements = new LinkedList<>();
         selected.getChildren().clear();
         ChannelSftp.LsEntrySelector selector = new ChannelSftp.LsEntrySelector() {
             @Override
             public int select(ChannelSftp.LsEntry entry) {
-                String fileName = entry.getFilename();
-                File ff = new File(file.getAbsolutePath()+"/"+fileName);
-                if(fileName.equals(".") || fileName.equals(".."))
+                String ext = entry.getAttrs().isDir() ? "":entry.getFilename().split("\\.")[1];
+                RemoteFile remoteFile = new RemoteFile(Active.ssh.pwd()+"/"+entry.getFilename(),entry.getFilename(),ext,entry.getAttrs().getSize(),entry.getAttrs().isDir());
+                String name = remoteFile.getName();
+                if(name.equals(".") || name.equals(".."))
                     return CONTINUE;
-                TreeItem<String> item = new TreeItem<>(fileName);
-                if(entry.getAttrs().isDir()) {
+                TreeItemFile<RemoteFile> item = new TreeItemFile<>(remoteFile);
+                if(remoteFile.isDirectory()) {
                     elements.addFirst(item);
-                    System.out.println(entry.getAttrs().getSize());
                     if(entry.getAttrs().getSize()>6)
                         item.getChildren().add(new TreeItem<>(""));
                 }else
                     elements.add(item);
 
                 item.expandedProperty().addListener(((observable, oldValue, newValue) -> {
-                    loadTreeItem(item, ff.getAbsolutePath());
+                    System.out.println(remoteFile.getPath());
+                    try {
+                        sftp.cd(remoteFile.getPath());
+                    } catch (SftpException e) {
+                        throw new RuntimeException(e);
+                    }
+                    loadTreeItem(item, remoteFile.getPath());
                 }));
                 return CONTINUE;
             }
         };
         try {
-            sftp.ls(path, selector);
+            sftp.ls(sftp.pwd(), selector);
         } catch (SftpException e) {
             throw new RuntimeException(e);
         }
@@ -86,7 +94,7 @@ public class RemoteFiles extends FileManagement{
     }
 
     @Override
-    public TreeItem<String> getRootItem() {
+    public TreeItemFile<RemoteFile> getRootItem() {
         return rootItem;
     }
 }

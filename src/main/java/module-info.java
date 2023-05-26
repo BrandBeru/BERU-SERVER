@@ -10,6 +10,7 @@ module org.beru.server.beruserver {
     requires mysql.connector.j;
     requires java.sql;
     requires com.fasterxml.jackson.databind;
+    requires org.apache.commons.io;
 
     opens org.beru.server.beruserver to javafx.fxml;
 
@@ -27,4 +28,7 @@ module org.beru.server.beruserver {
     exports org.beru.server.beruserver.model.db.model;
     opens org.beru.server.beruserver.model.db.info;
     exports org.beru.server.beruserver.controller.db;
+    exports org.beru.server.beruserver.controller.files;
+    exports org.beru.server.beruserver.view.ui.control;
+    exports org.beru.server.beruserver.model.file;
 }

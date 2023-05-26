@@ -10,10 +10,16 @@
     <string name="application_name">BERU-SERVER CONTROLLER MORE</string>
 
     <string-array name="connection_type">
+        <item>SSH Manager</item>
+        <item>DataBase Manager</item>
         <item>FTP</item>
         <item>SFTP</item>
-        <item>DataBase Manager</item>
-        <item>SSH Manager</item>
+    </string-array>
+    <string-array name="databases">
+        <item>Mysql</item>
+        <item>Postgresql</item>
+        <item>SQLite</item>
+        <item>MariaDB</item>
     </string-array>
 
 

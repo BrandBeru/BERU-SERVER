@@ -1,16 +1,15 @@
 package org.beru.server.beruserver.model.db;
 
-import javafx.scene.control.Tab;
+import org.beru.server.beruserver.model.Encrypt;
 import org.beru.server.beruserver.model.db.info.Id;
 import org.beru.server.beruserver.model.db.info.Table;
+import org.beru.server.beruserver.model.db.info.Type;
 import org.beru.server.beruserver.model.db.info.Value;
 import org.beru.server.beruserver.model.db.model.Column;
 import org.beru.server.beruserver.model.db.model.DB;
-import org.beru.server.beruserver.resources.C;
-import org.beru.server.beruserver.resources.R;
+import org.beru.server.beruserver.model.login.User;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,8 +21,12 @@ public class SqlManager implements CRUD{
     private String table;
     private Map<String, Object> datas = new HashMap<>();
     private Object info;
+    private User user;
+    private String driver;
 
-    public SqlManager(){
+    public SqlManager(User user, String driver){
+        this.user = user;
+        this.driver = driver;
         initialization();
     }
     @Override
@@ -112,10 +115,26 @@ public class SqlManager implements CRUD{
         List<DB> dbs = new ArrayList<>();
         try {
             Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery("SHOW DATABASES");
+            ResultSet rs = stmt.executeQuery("SELECT * FROM INFORMATION_SCHEMA.SCHEMATA");
             while (rs.next()){
-                String name = rs.getString("Database");
-                DB database = new DB(name, getTables(name));
+                String name = rs.getString("SCHEMA_NAME");
+
+                PreparedStatement statementLength = conn.prepareStatement("SELECT table_schema \"DB Name\",\n" +
+                        "        ROUND(SUM(data_length + index_length) / 1024 / 1024, 1) \"LENGTH\" \n" +
+                        "FROM information_schema.tables WHERE TABLE_SCHEMA=?");
+                statementLength.setString(1, name);
+                ResultSet resultSetLength = statementLength.executeQuery();
+                DB database = new DB(
+                        name,
+                        rs.getString("DEFAULT_CHARACTER_SET_NAME"),
+                        rs.getString("DEFAULT_COLLATION_NAME"),
+                        rs.getString("SQL_PATH"),
+                        "OMIT",
+                        null
+                );
+                database.setTables(getTables(database));
+                while (resultSetLength.next())
+                    database.setSize(resultSetLength.getString("LENGTH"));
                 dbs.add(database);
             }
             return dbs;
@@ -123,11 +142,11 @@ public class SqlManager implements CRUD{
             throw new RuntimeException(e);
         }
     }
-    public List<org.beru.server.beruserver.model.db.model.Table> getTables(String db){
+    public List<org.beru.server.beruserver.model.db.model.Table> getTables(DB db){
         List<org.beru.server.beruserver.model.db.model.Table> tables = new ArrayList<>();
         try{
             PreparedStatement stmt = conn.prepareStatement("SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA=?");
-            stmt.setString(1, db);
+            stmt.setString(1, db.getName());
             ResultSet rs = stmt.executeQuery();
             int id = 0;
             while (rs.next()){
@@ -137,9 +156,11 @@ public class SqlManager implements CRUD{
                         tableName,
                         rs.getString("ENGINE"),
                         rs.getInt("AUTO_INCREMENT"),
-                        rs.getString("CHECKSUM"),
+                        rs.getString("DATA_LENGTH"),
+                        db.getCharset(),
                         rs.getString("TABLE_COLLATION"),
                         rs.getString("TABLE_COMMENT"),
+                        rs.getDate("CREATE_TIME"),
                         getColumns(tableName)
                 );
                 tables.add(table);
@@ -175,13 +196,52 @@ public class SqlManager implements CRUD{
             throw new RuntimeException(e);
         }
     }
+    public List<String> getCharsets(){
+        List<String> charsets = new ArrayList<>();
+        try {
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery("select character_set_name from information_schema.character_sets");
+            while (rs.next())
+                charsets.add(rs.getString(1));
+            return  charsets;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }public List<String> getCollations(){
+        List<String> charsets = new ArrayList<>();
+        try {
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery("select COLLATION_NAME  from information_schema.collations");
+            while (rs.next())
+                charsets.add(rs.getString(1));
+            return  charsets;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }public List<String> getEngines(){
+        List<String> charsets = new ArrayList<>();
+        try {
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery("select ENGINE  from information_schema.engines");
+            while (rs.next())
+                charsets.add(rs.getString(1));
+            return  charsets;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     private void initialization(){
         try {
-            Class.forName(R.properties.active_driver);
 
-            conn = DriverManager.getConnection(R.properties.url, R.properties.username, R.properties.password);
-        } catch (ClassNotFoundException | SQLException e) {
+            String url = "jdbc:"+driver+"://"+user.getHost()+":"+user.getPort()+"/"+user.getDb();
+            conn = DriverManager.getConnection(url, user.getName(), Encrypt.decrypt(user.getPassword()));
+
+            Type.charsets = getCharsets();
+            Type.collations = getCollations();
+            Type.engines = getEngines();
+        } catch (SQLException e) {
+            e.printStackTrace();
             throw new RuntimeException(e);
         }
     }

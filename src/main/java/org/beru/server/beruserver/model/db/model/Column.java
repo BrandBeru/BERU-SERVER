@@ -7,9 +7,9 @@ public class Column {
     private String nullable;
     private String extra;
     private String key;
-    private Object colDefault;
+    private String colDefault;
 
-    public Column(int id, String name, String dataType, String nullable, String extra, String key, Object colDefault) {
+    public Column(int id, String name, String dataType, String nullable, String extra, String key, String colDefault) {
         this.id = id;
         this.name = name;
         this.dataType = dataType;
@@ -67,11 +67,11 @@ public class Column {
         this.key = key;
     }
 
-    public Object getColDefault() {
+    public String getColDefault() {
         return colDefault;
     }
 
-    public void setColDefault(Object colDefault) {
+    public void setColDefault(String colDefault) {
         this.colDefault = colDefault;
     }
 
